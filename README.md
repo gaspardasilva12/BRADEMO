@@ -237,10 +237,6 @@ python -m pytest tests/ -v
 - `GET /classificacoes/produto/{produto_id}` - Obtém classificação de um produto
 - `GET /estatisticas` - Obtém estatísticas do sistema
 
-## 📝 Exemplos
-
-Veja exemplos de uso na pasta `examples/`.
-
 ## 🔧 Configuração
 
 O sistema permite configurar:
@@ -260,9 +256,6 @@ O sistema mantém estatísticas de:
 
 Todas as estatísticas são exibidas no **Dashboard Web** em tempo real.
 
-## 🎯 Apresentação para Startups
-
-Este projeto está **pronto para apresentação** em eventos, demos e reuniões com investidores. Siga estes passos:
 
 ### Preparação Rápida
 
@@ -347,7 +340,9 @@ Equipe UFSC
 
 Para mais informações, entre em contato com a equipe do projeto.
 
+
 ## 🔄 Versão
 
 Versão atual: 1.0.0
+
 
