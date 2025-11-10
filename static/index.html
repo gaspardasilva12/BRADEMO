@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Inspeção UFSC</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>🏥 Sistema de Inspeção UFSC</h1>
+                    <p class="subtitle">Inspeção Automatizada de Campos Cirúrgicos</p>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Status</span>
+                        <span class="stat-value status-online" id="system-status">Online</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Última Atualização</span>
+                        <span class="stat-value" id="last-update">--:--:--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#dashboard" class="nav-link active" data-page="dashboard">Dashboard</a></li>
+                <li><a href="#produtos" class="nav-link" data-page="produtos">Produtos</a></li>
+                <li><a href="#inspecoes" class="nav-link" data-page="inspecoes">Inspeções</a></li>
+    <!-- View Product Modal -->
+    <div id="modal-view-product" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detalhes do Produto</h2>
+                <span class="modal-close" onclick="closeModal('modal-view-product')">&times;</span>
+            </div>
+            <div class="modal-body" id="modal-view-body">
+                <!-- Conteúdo preenchido via JS -->
+                <div class="product-details">
+                    <p><strong>ID:</strong> <span id="detail-id">-</span></p>
+                    <p><strong>Status:</strong> <span id="detail-status">-</span></p>
+                    <p><strong>Lado atual:</strong> <span id="detail-lado">-</span></p>
+                    <p><strong>Classificação final:</strong> <span id="detail-classificacao">-</span></p>
+                    <p><strong>Data entrada:</strong> <span id="detail-entrada">-</span></p>
+                    <p><strong>Data classificação:</strong> <span id="detail-timestamp-classificacao">-</span></p>
+                    <p><strong>Criado em:</strong> <span id="detail-created">-</span></p>
+                    <p><strong>Atualizado em:</strong> <span id="detail-updated">-</span></p>
+                </div>
+
+                <hr />
+
+                <div class="related-section">
+                    <h3>Inspeções relacionadas</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Lado</th>
+                                    <th>Qualidade</th>
+                                    <th>Câmera</th>
+                                    <th>Defeitos</th>
+                                    <th>Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-inspecoes-tbody">
+                                <tr><td colspan="6" class="loading">Carregando inspeções...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="related-section">
+                    <h3>Última classificação</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Classificação</th>
+                                    <th>Confiança</th>
+                                    <th>Motivo</th>
+                                    <th>Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-classificacoes-tbody">
+                                <tr><td colspan="5" class="loading">Carregando classificação...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('modal-view-product')">Fechar</button>
+            </div>
+        </div>
+    </div>
+                <li><a href="#classificacoes" class="nav-link" data-page="classificacoes">Classificações</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Page -->
+            <div id="page-dashboard" class="page active">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <h3>Total Classificados</h3>
+                            <span class="stat-icon">📊</span>
+                        </div>
+                        <div class="stat-card-value" id="stat-total">0</div>
+                        <div class="stat-card-footer">
+                            <span class="stat-change positive">Todos os produtos</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card approved">
+                        <div class="stat-card-header">
+                            <h3>Aprovados</h3>
+                            <span class="stat-icon">✅</span>
+                        </div>
+                        <div class="stat-card-value" id="stat-aprovados">0</div>
+                        <div class="stat-card-footer">
+                            <span class="stat-change positive" id="stat-aprovados-pct">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card reprocess">
+                        <div class="stat-card-header">
+                            <h3>Reprocessar</h3>
+                            <span class="stat-icon">🔄</span>
+                        </div>
+                        <div class="stat-card-value" id="stat-reprocessar">0</div>
+                        <div class="stat-card-footer">
+                            <span class="stat-change warning" id="stat-reprocessar-pct">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card segregated">
+                        <div class="stat-card-header">
+                            <h3>Segregados</h3>
+                            <span class="stat-icon">⚠️</span>
+                        </div>
+                        <div class="stat-card-value" id="stat-segregados">0</div>
+                        <div class="stat-card-footer">
+                            <span class="stat-change negative" id="stat-segregados-pct">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Distribuição de Classificações</h3>
+                        </div>
+                        <canvas id="chart-distribution"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Histórico (Últimos 7 dias)</h3>
+                        </div>
+                        <canvas id="chart-history"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Desempenho por Câmera</h3>
+                        </div>
+                        <canvas id="chart-camera"></canvas>
+                        <div id="camera-summary" style="margin-top:12px; font-size:14px; color:var(--text-secondary);"></div>
+                        <div class="table-container" style="margin-top:12px;">
+                            <table class="data-table" id="camera-status-table">
+                                <thead>
+                                    <tr>
+                                        <th>Câmera</th>
+                                        <th>Posição</th>
+                                        <th>Status</th>
+                                        <th>Capturas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="camera-status-tbody">
+                                    <tr><td colspan="4" class="loading">Carregando câmeras...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Classifications -->
+                <div class="recent-section">
+                    <div class="section-header">
+                        <h2>Classificações Recentes</h2>
+                        <button class="btn-refresh" onclick="loadData()">🔄 Atualizar</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="table-recent">
+                            <thead>
+                                <tr>
+                                    <th>Produto ID</th>
+                                    <th>Classificação</th>
+                                    <th>Confiança</th>
+                                    <th>Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-tbody">
+                                <tr>
+                                    <td colspan="4" class="loading">Carregando dados...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produtos Page -->
+            <div id="page-produtos" class="page">
+                <div class="page-header">
+                    <h2>Produtos</h2>
+                    <button class="btn-primary" onclick="showCreateProductModal()">+ Novo Produto</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="table-produtos">
+                        <thead>
+                            <tr>
+                                <th style="width:36px;text-align:center"><input type="checkbox" id="select-all-produtos" title="Selecionar todos"></th>
+                                <th>ID</th>
+                                <th>Status</th>
+                                <th>Lado Atual</th>
+                                <th>Classificação Final</th>
+                                <th>Data Entrada</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="produtos-tbody">
+                            <tr>
+                                <td colspan="7" class="loading">Carregando dados...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Inspeções Page -->
+            <div id="page-inspecoes" class="page">
+                <div class="page-header">
+                    <h2>Inspeções</h2>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="table-inspecoes">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Produto ID</th>
+                                <th>Lado</th>
+                                <th>Qualidade</th>
+                                <th>Câmera</th>
+                                <th>Defeitos</th>
+                                <th>Data/Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inspecoes-tbody">
+                            <tr>
+                                <td colspan="7" class="loading">Carregando dados...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Classificações Page -->
+            <div id="page-classificacoes" class="page">
+                <div class="page-header">
+                    <h2>Classificações</h2>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="table-classificacoes">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Produto ID</th>
+                                <th>Classificação</th>
+                                <th>Confiança</th>
+                                <th>Motivo</th>
+                                <th>Data/Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody id="classificacoes-tbody">
+                            <tr>
+                                <td colspan="6" class="loading">Carregando dados...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Product Modal -->
+    <div id="modal-create-product" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Criar Novo Produto</h2>
+                <span class="modal-close" onclick="closeModal('modal-create-product')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="form-create-product">
+                    <div class="form-group">
+                        <label for="product-id">ID do Produto <span class="optional-label">(opcional - será gerado automaticamente se não informado)</span></label>
+                        <input type="text" id="product-id" name="id" placeholder="Deixe em branco para gerar automaticamente">
+                        <small class="form-help">Se deixar em branco, será gerado automaticamente (ex: PROD001, PROD002, etc.)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-lado">Lado Atual</label>
+                        <select id="product-lado" name="lado_atual" required>
+                            <option value="superior">Superior</option>
+                            <option value="inferior">Inferior</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-status">Status</label>
+                        <select id="product-status" name="status" required>
+                            <option value="pendente">Pendente</option>
+                            <option value="em_inspecao">Em Inspeção</option>
+                            <option value="inspecionado">Inspecionado</option>
+                            <option value="classificado">Classificado</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('modal-create-product')">Cancelar</button>
+                        <button type="submit" class="btn-primary">Criar Produto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Gaspar developer - Sistema de Inspeção Automatizada</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/dashboard.js"></script>
+    <!-- Confirm Delete Modal (centered) -->
+    <div id="modal-confirm-delete" class="modal confirm-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirmar exclusão</h2>
+                <span class="modal-close" onclick="closeConfirmModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-delete-message">Confirma exclusão do produto?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeConfirmModal()">Cancelar</button>
+                <button class="btn-danger" id="confirm-delete-btn">Deletar</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
