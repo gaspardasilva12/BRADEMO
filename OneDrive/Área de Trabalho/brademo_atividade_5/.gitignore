@@ -1,0 +1,118 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# System and user files
+../
+../.*/
+../../*
+../../.*/
+../../../*
+../../../.*/
+.anaconda/
+.android/
+.cache/
+.cargo/
+.chocolatey/
+.codex/
+.conda/
+.continuum/
+.copilot/
+.cursor/
+.docker/
+.dotnet/
+.emulator_console_auth_token
+.expo/
+.ganttproject
+.ganttproject.d/
+.ghcp-appmod/
+.gitconfig
+.gradle/
+.ipynb_checkpoints/
+.ipython/
+.jupyter/
+.m2/
+.matplotlib/
+.packettracer
+.rest-client/
+.rustup/
+.ssh/
+.streamlit/
+.sts4/
+.th-client/
+.vscode-shared/
+AppData/
+BRADEMO-Projeto-Semestral/
+Cisco Packet Tracer 7.1.1/
+Contacts/
+Downloads/
+Favorites/
+IFSP-Python-Cap03a-Pandas.ipynb
+Links/
+Microsoft/
+Muse Hub/
+Music/
+NTUSER.DAT*
+Projects/
+Saved Games/
+Searches/
+Videos/
+anaconda3/
+app.py
+cadastro_equipamentos.dart
+cadastro_funcionario.dart
+cadastro_residencias.dart
+dataset.csv
+entrada.txt
+flutter/
+ganttproject.log*
+java*.log
+laptop.dart
+laptop_constructors.dart
+ntuser.dat.LOG*
+ntuser.ini
+postgresql_18.exe*
+projeto-semestre/
+vemcomigo/
