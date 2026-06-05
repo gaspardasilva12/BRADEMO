@@ -1,0 +1,58 @@
+{
+  "users": [
+    {
+      "prontuario": "12345",
+      "senha": "senha123",
+      "name": "João Silva",
+      "email": "joao.silva@ifsp.edu.br",
+      "photoPath": null
+    },
+    {
+      "prontuario": "67890",
+      "senha": "password",
+      "name": "Maria Oliveira",
+      "email": "maria.oliveira@ifsp.edu.br",
+      "photoPath": null
+    }
+    ,
+    {
+      "prontuario": "00001",
+      "senha": "test1234",
+      "name": "Usuário Teste",
+      "email": "teste@ifsp.edu.br",
+      "photoPath": null
+    }
+  ],
+  "equipments": [
+    {
+      "name": "Projetor Quebrado",
+      "room": "Sala B101",
+      "campus": "IFSP Bragança Paulista",
+      "reportDate": "2026-04-06T00:00:00.000",
+      "priority": "Alta",
+      "reports": 5,
+      "details": "O projetor não liga de forma consistente e a imagem fica com falhas, impactando as aulas de apresentação.",
+      "imageUrl": "assets/images/projetor.jpeg"
+    },
+    {
+      "name": "Computador com Problema",
+      "room": "Sala A402",
+      "campus": "IFSP Bragança Paulista",
+      "reportDate": "2026-04-04T00:00:00.000",
+      "priority": "Média",
+      "reports": 3,
+      "details": "O computador trava frequentemente e apresenta lentidão no carregamento de programas.",
+      "imageUrl": "assets/images/computador.png"
+    },
+    {
+      "name": "Ventilador Quebrado",
+      "room": "Sala C203",
+      "campus": "IFSP Bragança Paulista",
+      "reportDate": "2026-04-05T00:00:00.000",
+      "priority": "Baixa",
+      "reports": 1,
+      "details": "O ventilador não gira corretamente e faz barulho alto ao ser ligado.",
+      "imageUrl": "assets/images/ventilador.jpeg"
+    }
+  ]
+}
